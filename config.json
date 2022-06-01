@@ -1,5 +1,7 @@
 {
 	"prefix": "!",
   "openseaAssetUrl": "https://api.opensea.io/api/v1/asset",
-  "openseaEventsUrl": "https://api.opensea.io/api/v1/events"
+  "openseaEventsUrl": "https://api.opensea.io/api/v1/events",
+  "quixoticAPI":"https://api.quixotic.io/api/v1/",
+  "network": "opt"
 }

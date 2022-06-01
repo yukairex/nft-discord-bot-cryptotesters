@@ -6,8 +6,8 @@ var salesCache = [];
 var lastTimestamp = null;
 
 module.exports = {
-  name: 'sales',
-  description: 'sales bot',
+  name: 'mint',
+  description: 'mint bot',
   interval: 30000,
   enabled: process.env.DISCORD_SALES_CHANNEL_ID != null,
   async execute(client) {
@@ -28,7 +28,7 @@ module.exports = {
     };
     do {
       // URL https://api.quixotic.io/api/v1/opt/collection/
-      let url = `${quixoticAPI}${network}/collection/${process.env.CONTRACT_ADDRESS}/activity/?event=SA&limit=10&offset=10`
+      let url = `${quixoticAPI}${network}/collection/${process.env.CONTRACT_ADDRESS}/activity/?event=MI&limit=10&offset=10`
   
       try {
         var res = await fetch(url, settings);
@@ -41,7 +41,7 @@ module.exports = {
 
         next = data.next;
 
-        data.results.forEach(function (event) {
+        data.results.forEach(function (event) { 
             if (salesCache.includes(event.txn_id)) {
               newEvents = false;
               return;
@@ -56,15 +56,14 @@ module.exports = {
               return;
             }
 
-            if (event.event_type == 'Sale' && event.order_status == 'fulfilled') {
+            if (event.event_type == 'Mint') {
               const embedMsg = new Discord.MessageEmbed()
               .setColor('#0099ff')
               .setTitle(event.token.name)
               .setURL(`https://quixotic.io/asset/${process.env.CONTRACT_ADDRESS}/${event.token.token_id}`)
-              .setDescription(`has just been sold for ${event.end_price / (1e9)}\u039E`)
+              .setDescription(`has just been minted`)
               .setImage(event.token.image_url)
-              .addField("From", `[${event.from_profile.user?.username || event.from_profile.address.slice(0, 8)}](https://etherscan.io/address/${event.from_profile.address})`, true)
-              .addField("To", `[${event.to_profile.user?.username || event.to_profile.address.slice(0, 8)}](https://etherscan.io/address/${event.to_profile.address})`, true);
+              .addField("Owner", `[${event.to_profile.user?.username || event.to_profile.address}](https://etherscan.io/address/${event.to_profile.address})`, true);
 
               client.channels.fetch(process.env.DISCORD_SALES_CHANNEL_ID)
                 .then(channel => {
@@ -72,6 +71,7 @@ module.exports = {
                 })
                 .catch(console.error);
             }
+
         });
       }
       catch (error) {
