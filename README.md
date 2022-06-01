@@ -1,5 +1,6 @@
 # NFT Discord Bot
-This is a discord bot for CryptoTesters Community. All the token metadata is being retrieved from Quixotic Market API instead of directly from the tokenURI in the smart contract.
+This is a discord bot for CryptoTesters Community, forked from https://github.com/lucid-eleven/nft-discord-bot. 
+All the token metadata is being retrieved from Quixotic Market API instead of directly from the tokenURI in the smart contract.
 
 # Supported functions
 The following functions are currently supported:
@@ -8,7 +9,7 @@ The following functions are currently supported:
 ### **Sales**
 The bot will look up sales events on Quixotic every 30 seconds, and all newly closed sales will be posted to the configured Discord channel.
 
-![Sales bot example](https://i.imgur.com/jUHRJWi.png)
+![Sales bot example](https://i.imgur.com/RkTzrAW.png)
 
 ### **Minting**
 The bot will look up mint events on Quixotic every 30 seconds, and all newly created mints will be posted to the configured Discord channel.
