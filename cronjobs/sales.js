@@ -40,7 +40,7 @@ module.exports = {
         let data = await res.json();
    
 
-        next = data.next;
+        next = null;
 
         data.results.forEach(function (event) {
             if (salesCache.includes(event.txn_id)) {
