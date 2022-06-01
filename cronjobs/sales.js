@@ -53,7 +53,6 @@ module.exports = {
 
             // list to new events only
             if ((Date.parse(event.timestamp) / 1000) < lastTimestamp) {
-              console.log("bad")
               newEvents = false;
               return;
             }
