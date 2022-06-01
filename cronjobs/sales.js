@@ -12,7 +12,8 @@ module.exports = {
   enabled: process.env.DISCORD_SALES_CHANNEL_ID != null,
   async execute(client) {
     if (lastTimestamp == null) {
-      lastTimestamp = Math.floor(Date.now() / 1000) - 120;
+      // lastTimestamp = Math.floor(Date.now() / 1000) - 120;
+      lastTimestamp = 1653746603; // initial deployment
     } else {
       lastTimestamp -= 30;
     }
@@ -28,7 +29,7 @@ module.exports = {
     };
     do {
       // URL https://api.quixotic.io/api/v1/opt/collection/
-      let url = `${quixoticAPI}${network}/collection/${process.env.CONTRACT_ADDRESS}/activity/?event=SA&limit=10&offset=10`
+      let url = `${quixoticAPI}${network}/collection/${process.env.CONTRACT_ADDRESS}/activity/?event=SA&limit=10`
   
       try {
         var res = await fetch(url, settings);
@@ -52,9 +53,13 @@ module.exports = {
 
             // list to new events only
             if ((Date.parse(event.timestamp) / 1000) < lastTimestamp) {
+              console.log("bad")
               newEvents = false;
               return;
             }
+
+            // new sale
+            console.log(event)
 
             if (event.event_type == 'Sale' && event.order_status == 'fulfilled') {
               const embedMsg = new Discord.MessageEmbed()
