@@ -1,6 +1,7 @@
 const fetch = require('node-fetch');
 const Discord = require('discord.js');
 const { quixoticAPI, network } = require('../config.json');
+const { checkPrice } = require("../price");
 
 var salesCache = [];
 var lastTimestamp = null;
@@ -13,7 +14,7 @@ module.exports = {
   async execute(client) {
     if (lastTimestamp == null) {
       lastTimestamp = Math.floor(Date.now() / 1000) - 120;
-      //lastTimestamp = 1653746603; // initial deployment
+      lastTimestamp = 1653746603; // initial deployment
     } else {
       lastTimestamp -= 30;
     }
@@ -27,7 +28,14 @@ module.exports = {
         "X-API-KEY": process.env.QUIXOTIC_API_KEY
       }
     };
+
+    // query price from coingecko
+    let price =  await checkPrice(['ethereum']);
+
     do {
+
+      console.log(`querying mint event....`)
+
       // URL https://api.quixotic.io/api/v1/opt/collection/
       let url = `${quixoticAPI}${network}/collection/${process.env.CONTRACT_ADDRESS}/activity/?event=MI&limit=10`
   
@@ -65,10 +73,14 @@ module.exports = {
               .setColor('#0099ff')
               .setTitle(event.token.name)
               .setURL(`https://quixotic.io/asset/${process.env.CONTRACT_ADDRESS}/${event.token.token_id}`)
-              .setDescription(`has just been minted`)
+              .setDescription(`${event.token.name} has just been minted`)
               .setImage(event.token.image_url)
-              .addField("Owner", `[${event.to_profile.user?.username || event.to_profile.address}](https://etherscan.io/address/${event.to_profile.address})`, true);
-
+              .addField("Ethereum",`0.3\u039E`, true)
+              .addField("USD",`$${(0.3*price.ethereum.usd).toFixed(0)}`, true)   
+              .addField("Link",`[Link](https://quixotic.io/asset/${process.env.CONTRACT_ADDRESS}/${event.token.token_id})`, true)
+              .addField("Owner", `[${event.to_profile.user?.username || event.to_profile.address.slice(0, 8)}](https://optimistic.etherscan.io/address/${event.to_profile.address})`, true)
+              .addField("Transaction",`[Tx](https://optimistic.etherscan.io/tx/${event.txn_id})`, true)
+              .setFooter(`Powered by Quixotic API`)
               client.channels.fetch(process.env.DISCORD_SALES_CHANNEL_ID)
                 .then(channel => {
                   channel.send(embedMsg);
