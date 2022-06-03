@@ -12,8 +12,8 @@ const eventQueue = [];
 const main = async () => {
 
     if (lastTimestamp == null) {
-      //lastTimestamp = Math.floor(Date.now() / 1000) - 120;
-      lastTimestamp = 1653746603; // initial deployment
+      lastTimestamp = Math.floor(Date.now() / 1000) - 120;
+      //lastTimestamp = 1653746603; // initial deployment
     } else {
       lastTimestamp -= 30;
     }
@@ -150,6 +150,6 @@ async function processQueue() {
 
 
 main()
-//setInterval(main, 60000);
-setInterval(processQueue, 60000);
+setInterval(main, 60000);
+setInterval(processQueue, 70000);
 
