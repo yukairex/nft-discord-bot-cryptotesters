@@ -34,3 +34,6 @@ If running locally, just checkout the repository and run
 followed by
 
 `npm start`
+
+# To-Do
+- twitter API limits the size of image to be uploaded. need to compress the size before uploading otherwise sometime it may trigger error
