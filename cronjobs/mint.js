@@ -48,7 +48,7 @@ module.exports = {
         let data = await res.json();
    
 
-        next = null;
+        next = null;// a temproray fix
 
         data.results.forEach(function (event) { 
             if (salesCache.includes(event.txn_id)) {
