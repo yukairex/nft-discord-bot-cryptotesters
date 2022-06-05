@@ -1,6 +1,5 @@
 const fetch = require('node-fetch');
-const { openseaAssetUrl } = require('../config.json');
-
+const { quixoticAPI, network } = require('../config.json');
 const Discord = require('discord.js');
 
 module.exports = {
@@ -14,11 +13,11 @@ module.exports = {
       return message.channel.send(`Token id must be a number!`);
     }
 
-    let url = `${openseaAssetUrl}/${process.env.CONTRACT_ADDRESS}/${args[0]}`;
+    let url = `${quixoticAPI}${network}/asset/${process.env.CONTRACT_ADDRESS}:${args[0]}`;
     let settings = { 
       method: "GET",
-      headers: process.env.OPEN_SEA_API_KEY == null ? {} : {
-        "X-API-KEY": process.env.OPEN_SEA_API_KEY
+      headers: process.env.QUIXOTIC_API_KEY == null ? {} : {
+        "X-API-KEY": process.env.QUIXOTIC_API_KEY
       }
     };
     
@@ -35,11 +34,14 @@ module.exports = {
           return res.json();
         })
         .then((metadata) => {
+            console.log(metadata)
             const embedMsg = new Discord.MessageEmbed()
               .setColor('#0099ff')
               .setTitle(metadata.name)
-              .setURL(metadata.permalink)
-              .addField("Owner", metadata.owner.user?.username || metadata.owner.address.slice(0,8))
+              .setURL( `https://quixotic.io/asset/${process.env.CONTRACT_ADDRESS}/${metadata.token_id}`)
+              .addField("Owner", `[${metadata.owner.username?.username || metadata.owner.address.slice(0, 8)}](https://quixotic.io/${metadata.owner.address})`, true)    
+              // .addField("Owner", metadata.owner.user?.username || metadata.owner.address.slice(0,8), true)
+              .addField("Link",`[Link](https://quixotic.io/asset/${process.env.CONTRACT_ADDRESS}/${metadata.token_id})`, true)
               .setImage(metadata.image_url);
 
             metadata.traits.forEach(function(trait){
