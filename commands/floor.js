@@ -1,5 +1,5 @@
 const fetch = require('node-fetch');
-const { openseaAssetUrl } = require('../config.json');
+const { quixoticAPI, network } = require('../config.json');
 
 const CacheService = require('../cache')
 
@@ -7,11 +7,12 @@ const ttl = 60; //cache for 60 seconds;
 const cache = new CacheService(ttl);
 
 const fetchFloor = async () => {
-  let url = `https://api.opensea.io/api/v1/collection/${process.env.OPEN_SEA_COLLECTION_NAME}/stats`
+  let url = `https://api.quixotic.io/api/v1/${network}/collection/${process.env.CONTRACT_ADDRESS}/stats/`
+
   let settings = { 
     method: "GET",
-    headers: process.env.OPEN_SEA_API_KEY == null ? {} : {
-      "X-API-KEY": process.env.OPEN_SEA_API_KEY
+    headers: process.env.QUIXOTIC_API_KEY == null ? {} : {
+      "X-API-KEY": process.env.QUIXOTIC_API_KEY
     }
   };
 

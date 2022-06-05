@@ -37,23 +37,23 @@ client.on('ready', () => {
   });
 })
 
-// client.on('message', msg => {
-//   if (!msg.content.startsWith(prefix) || msg.author.bot) return;
+client.on('message', msg => {
+  if (!msg.content.startsWith(prefix) || msg.author.bot) return;
 
-//   const args = msg.content.slice(prefix.length).trim().split(' ');
-//   const commandName  = args.shift().toLowerCase();
+  const args = msg.content.slice(prefix.length).trim().split(' ');
+  const commandName  = args.shift().toLowerCase();
 
-//   if (!client.commands.has(commandName)) return;
+  if (!client.commands.has(commandName)) return;
 
-//   const command = client.commands.get(commandName);
+  const command = client.commands.get(commandName);
 
-//   try {
-//     command.execute(msg, args);
-//   } catch (error) {
-//     console.error(error);
-//     msg.reply('there was an error trying to execute that command!');
-//   }
-// })
+  try {
+    command.execute(msg, args);
+  } catch (error) {
+    console.error(error);
+    msg.reply('there was an error trying to execute that command!');
+  }
+})
 
 client.login(process.env.DISCORD_BOT_TOKEN);
 
