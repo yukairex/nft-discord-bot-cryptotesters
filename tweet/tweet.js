@@ -33,7 +33,7 @@ const main = async () => {
     let price =  await checkPrice(['ethereum']);
 
     do {
-      console.log(`querying twitter event....`)
+      // console.log(`querying twitter event....`)
 
       // URL https://api.quixotic.io/api/v1/opt/collection/
       let url = `${quixoticAPI}${network}/collection/${process.env.CONTRACT_ADDRESS}/activity/?event=SA&event=MI&limit=10`

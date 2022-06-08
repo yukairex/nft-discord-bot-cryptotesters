@@ -34,7 +34,7 @@ module.exports = {
 
 
     do {
-      console.log(`querying sales event....`)
+      //console.log(`querying sales event....`)
 
       // URL https://api.quixotic.io/api/v1/opt/collection/
       let url = `${quixoticAPI}${network}/collection/${process.env.CONTRACT_ADDRESS}/activity/?event=SA&limit=10`
