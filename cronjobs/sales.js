@@ -9,7 +9,7 @@ var lastTimestamp = null;
 module.exports = {
   name: 'sales',
   description: 'sales bot',
-  interval: 30000,
+  interval: 60000,
   enabled: process.env.DISCORD_SALES_CHANNEL_ID != null,
   async execute(client) {
     if (lastTimestamp == null) {
