@@ -13,8 +13,8 @@ module.exports = {
   enabled: process.env.DISCORD_SALES_CHANNEL_ID != null,
   async execute(client) {
     if (lastTimestamp == null) {
-      lastTimestamp = Math.floor(Date.now() / 1000) - 120;
-      //lastTimestamp = 1653746603; // initial deployment
+      //lastTimestamp = Math.floor(Date.now() / 1000) - 120;
+      lastTimestamp = 1653746603; // initial deployment
     } else {
       lastTimestamp -= 30;
     }
@@ -68,7 +68,14 @@ module.exports = {
             // new sale
             console.log(event)
 
+
+          
+
             if (event.event_type == 'Sale' && event.order_status == 'fulfilled') {
+
+              // temp solution for op
+              if (event.end_price/1e9 > 10) return;
+
               const embedMsg = new Discord.MessageEmbed()
               .setColor('#0099ff')
               .setTitle(event.token.name)

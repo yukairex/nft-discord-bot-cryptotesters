@@ -68,6 +68,10 @@ const main = async () => {
             console.log(event)
 
             if (event.event_type == 'Sale' && event.order_status == 'fulfilled') {
+
+              // temp solution for op
+              if (event.end_price/1e9 > 10) return;
+
               let url = event.token.image_url;
               let id = event.token.token_id;
               let end_price = event.end_price / (1e9);
