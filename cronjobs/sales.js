@@ -13,8 +13,8 @@ module.exports = {
   enabled: process.env.DISCORD_SALES_CHANNEL_ID != null,
   async execute(client) {
     if (lastTimestamp == null) {
-      //lastTimestamp = Math.floor(Date.now() / 1000) - 120;
-      lastTimestamp = 1653746603; // initial deployment
+      lastTimestamp = Math.floor(Date.now() / 1000) - 120;
+      //lastTimestamp = 1653746603; // initial deployment
     } else {
       lastTimestamp -= 30;
     }
