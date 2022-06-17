@@ -36,7 +36,7 @@ const main = async () => {
       // console.log(`querying twitter event....`)
 
       // URL https://api.quixotic.io/api/v1/opt/collection/
-      let url = `${quixoticAPI}${network}/collection/${process.env.CONTRACT_ADDRESS}/activity/?event=SA&event=MI&limit=10`
+      let url = `${quixoticAPI}${network}/collection/${process.env.CONTRACT_ADDRESS}/activity/?event=SA&event=MI&limit=10&currency=ETH`
   
       try {
         var res = await fetch(url, settings);
@@ -68,9 +68,6 @@ const main = async () => {
             console.log(event)
 
             if (event.event_type == 'Sale' && event.order_status == 'fulfilled') {
-
-              // temp solution for op
-              if (event.end_price/1e9 > 10) return;
 
               let url = event.token.image_url;
               let id = event.token.token_id;
