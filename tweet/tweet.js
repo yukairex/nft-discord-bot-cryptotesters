@@ -36,7 +36,7 @@ const main = async () => {
       // console.log(`querying twitter event....`)
 
       // URL https://api.quixotic.io/api/v1/opt/collection/
-      let url = `${quixoticAPI}${network}/collection/${process.env.CONTRACT_ADDRESS}/activity/?event=SA&event=MI&limit=10&currency=ETH`
+      let url = `${quixoticAPI}${network}/collection/${process.env.CONTRACT_ADDRESS}/activity/?event=SA&limit=10&currency=ETH`
   
       try {
         var res = await fetch(url, settings);
@@ -88,29 +88,23 @@ const main = async () => {
               })
             }
 
-            if (event.event_type == 'Mint') {
+            // if (event.event_type == 'Mint') {
+            //   let url = event.token.image_url;
+            //   let id = event.token.token_id;
+            //   let end_price = 0.3
+            //   let end_price_usd = (0.3 *price.ethereum.usd).toFixed(2);
+            //   let to = event.to_profile.address.slice(0, 8)
+            //   let tx = `https://optimistic.etherscan.io/tx/${event.txn_id}`
+            //   let note = `Powered by Quixotic API`
+            //   let quixoticURL = `https://quixotic.io/asset/${process.env.CONTRACT_ADDRESS}/${event.token.token_id}`
+            //   let message = `Tester ${id} minted for ${end_price}\u039E ($${end_price_usd}) by ${to}. ${quixoticURL} #cryptotesters #optimism`
 
-
-              let url = event.token.image_url;
-              let id = event.token.token_id;
-              let end_price = 0.3
-              let end_price_usd = (0.3 *price.ethereum.usd).toFixed(2);
-              let to = event.to_profile.address.slice(0, 8)
-              let tx = `https://optimistic.etherscan.io/tx/${event.txn_id}`
-              let note = `Powered by Quixotic API`
-              let quixoticURL = `https://quixotic.io/asset/${process.env.CONTRACT_ADDRESS}/${event.token.token_id}`
-              let message = `Tester ${id} minted for ${end_price}\u039E ($${end_price_usd}) by ${to}. ${quixoticURL} #cryptotesters #optimism`
-
-              eventQueue.push({
-                url,
-                message,
-                id
-              })
-
-            }
-            
-
-            // new mint
+            //   eventQueue.push({
+            //     url,
+            //     message,
+            //     id
+            //   })
+            // }
 
 
 
