@@ -16,9 +16,9 @@ module.exports = {
       lastTimestamp = Math.floor(Date.now() / 1000) - 120;
       //lastTimestamp = 1653746603; // initial deployment
     } else {
-      lastTimestamp -= 30;
+      lastTimestamp -= 60;
     }
-    let newTimestamp = Math.floor(Date.now() / 1000) - 30;
+    let newTimestamp = Math.floor(Date.now() / 1000) - 60;
 
     let next = null;
     let newEvents = true;
