@@ -15,9 +15,9 @@ const main = async () => {
       lastTimestamp = Math.floor(Date.now() / 1000) - 120;
       //lastTimestamp = 1656909073; // initial deployment
     } else {
-      lastTimestamp -= 60;
+      lastTimestamp -= 30;
     }
-    let newTimestamp = Math.floor(Date.now() / 1000) - 60;
+    let newTimestamp = Math.floor(Date.now() / 1000) - 30;
 
     let next = null;
     let newEvents = true;
