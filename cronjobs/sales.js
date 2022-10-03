@@ -37,8 +37,8 @@ module.exports = {
       //console.log(`querying sales event....`)
 
       // URL https://api.quixotic.io/api/v1/opt/collection/
-      let url = `${quixoticAPI}collection/${process.env.CONTRACT_ADDRESS}/activity/?event=SA&limit=10&currency=ETH`
-  
+     // let url = `${quixoticAPI}collection/${process.env.CONTRACT_ADDRESS}/activity/?event=SA&limit=10&currency=ETH`
+      let url = `${quixoticAPI}collection/${process.env.CONTRACT_ADDRESS}/activity/?limit=10`
       try {
         var res = await fetch(url, settings);
         if (res.status != 200) {
@@ -69,7 +69,8 @@ module.exports = {
             console.log(event)
 
 
-            if (event.event_type == 'Sale' && event.order_status == 'fulfilled') {
+
+            if (event.event_type == 'Sale' && event.order_status == 'fulfilled' && event.currency == 'ETH') {
               const embedMsg = new Discord.MessageEmbed()
               .setColor('#0099ff')
               .setTitle(event.token.name)
