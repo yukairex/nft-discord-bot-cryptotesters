@@ -13,7 +13,7 @@ module.exports = {
       return message.channel.send(`Token id must be a number!`);
     }
 
-    let url = `${quixoticAPI}${network}/asset/${process.env.CONTRACT_ADDRESS}:${args[0]}`;
+    let url = `${quixoticAPI}/asset/${process.env.CONTRACT_ADDRESS}:${args[0]}`;
     console.log(url)
     let settings = { 
       method: "GET",
