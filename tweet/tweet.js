@@ -11,9 +11,10 @@ const eventQueue = [];
 
 const main = async () => {
 
+
     if (lastTimestamp == null) {
       lastTimestamp = Math.floor(Date.now() / 1000) - 120;
-      //lastTimestamp = 1653746603; // initial deployment
+     // lastTimestamp = 1664602413; // initial deployment
     } else {
       lastTimestamp -= 30;
     }
@@ -30,14 +31,17 @@ const main = async () => {
     };
 
     // query price from coingecko
-    let price =  await checkPrice(['ethereum']);
+
+   let price =  await checkPrice(['ethereum']);
+
 
     do {
       // console.log(`querying twitter event....`)
 
       // URL https://api.quixotic.io/api/v1/opt/collection/
-      let url = `${quixoticAPI}collection/${process.env.CONTRACT_ADDRESS}/activity/?event=SA&limit=10&currency=ETH`
-  
+    //  let url = `${quixoticAPI}collection/${process.env.CONTRACT_ADDRESS}/activity/?event=SA&limit=10&currency=ETH`
+      let url = `${quixoticAPI}collection/${process.env.CONTRACT_ADDRESS}/activity/?limit=10`
+      console.log(url)
       try {
         var res = await fetch(url, settings);
         if (res.status != 200) {
@@ -45,8 +49,6 @@ const main = async () => {
         }
 
         let data = await res.json();
-   
-
         next = null; // a temproray fix
 
         data.results.forEach(async function (event) {
@@ -65,10 +67,11 @@ const main = async () => {
             }
 
             // new sale
-            console.log(event)
 
-            if (event.event_type == 'Sale' && event.order_status == 'fulfilled') {
 
+            if (event.event_type == 'Sale' && event.order_status == 'fulfilled' && event.currency == 'ETH') {
+
+              console.log(event)
               let url = event.token.image_url;
               let id = event.token.token_id;
               let end_price = event.end_price / (1e9);
@@ -87,25 +90,6 @@ const main = async () => {
                 id
               })
             }
-
-            // if (event.event_type == 'Mint') {
-            //   let url = event.token.image_url;
-            //   let id = event.token.token_id;
-            //   let end_price = 0.3
-            //   let end_price_usd = (0.3 *price.ethereum.usd).toFixed(2);
-            //   let to = event.to_profile.address.slice(0, 8)
-            //   let tx = `https://optimistic.etherscan.io/tx/${event.txn_id}`
-            //   let note = `Powered by Quixotic API`
-            //   let quixoticURL = `https://quixotic.io/asset/${process.env.CONTRACT_ADDRESS}/${event.token.token_id}`
-            //   let message = `Tester ${id} minted for ${end_price}\u039E ($${end_price_usd}) by ${to}. ${quixoticURL} #cryptotesters #optimism`
-
-            //   eventQueue.push({
-            //     url,
-            //     message,
-            //     id
-            //   })
-            // }
-
 
 
         });

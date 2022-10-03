@@ -69,10 +69,7 @@ module.exports = {
             console.log(event)
 
 
-          
-
             if (event.event_type == 'Sale' && event.order_status == 'fulfilled') {
-
               const embedMsg = new Discord.MessageEmbed()
               .setColor('#0099ff')
               .setTitle(event.token.name)

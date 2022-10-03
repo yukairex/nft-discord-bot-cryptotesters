@@ -36,7 +36,7 @@ const main = async () => {
       // console.log(`querying twitter event....`)
 
       // URL https://api.quixotic.io/api/v1/opt/collection/
-      let url = `${quixoticAPI}collection/${process.env.CONTRACT_ADDRESS}/activity/?event=MI&limit=10`
+      let url = `${quixoticAPI}collection/${process.env.CONTRACT_ADDRESS}/activity/?limit=10`
   
       try {
         var res = await fetch(url, settings);
@@ -71,7 +71,7 @@ const main = async () => {
             if (event.event_type == 'Mint') {
               let url = event.token.image_url;
               let id = event.token.token_id;
-              let end_price = 0.3
+              let end_price = 0.3;
               let end_price_usd = (0.3 *price.ethereum.usd).toFixed(2);
               let to = event.to_profile.address.slice(0, 8)
               let tx = `https://optimistic.etherscan.io/tx/${event.txn_id}`
