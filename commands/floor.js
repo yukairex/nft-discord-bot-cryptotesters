@@ -7,7 +7,7 @@ const ttl = 60; //cache for 60 seconds;
 const cache = new CacheService(ttl);
 
 const fetchFloor = async () => {
-  let url = `https://api.quixotic.io/api/v1/${network}/collection/${process.env.CONTRACT_ADDRESS}/stats/`
+  let url = `https://${quixoticAPI}collection/${process.env.CONTRACT_ADDRESS}/stats/`
 
   let settings = { 
     method: "GET",
