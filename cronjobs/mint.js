@@ -37,7 +37,7 @@ module.exports = {
      // console.log(`querying mint event....`)
 
       // URL https://api.quixotic.io/api/v1/opt/collection/
-      let url = `${quixoticAPI}${network}/collection/${process.env.CONTRACT_ADDRESS}/activity/?event=MI&limit=10`
+      let url = `${quixoticAPI}collection/${process.env.CONTRACT_ADDRESS}/activity/?event=MI&limit=10`
   
       try {
         var res = await fetch(url, settings);
