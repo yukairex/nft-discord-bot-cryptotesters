@@ -14,6 +14,7 @@ module.exports = {
     }
 
     let url = `${quixoticAPI}${network}/asset/${process.env.CONTRACT_ADDRESS}:${args[0]}`;
+    console.log(url)
     let settings = { 
       method: "GET",
       headers: process.env.QUIXOTIC_API_KEY == null ? {} : {
