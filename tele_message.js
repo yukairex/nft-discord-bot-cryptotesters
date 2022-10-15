@@ -11,6 +11,4 @@ const postMessage = async (message) => {
 };
 
 
-
-};
 module.exports.postMessage = postMessage;
