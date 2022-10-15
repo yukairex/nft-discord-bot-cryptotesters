@@ -39,7 +39,7 @@ module.exports = {
 
       // URL https://api.quixotic.io/api/v1/opt/collection/
      // let url = `${quixoticAPI}collection/${process.env.CONTRACT_ADDRESS}/activity/?event=SA&limit=10&currency=ETH`
-      let url = `${quixoticAPI}collection/${process.env.CONTRACT_ADDRESS}/activity/?limit=10`
+      let url = `${quixoticAPI}collection/${process.env.CONTRACT_ADDRESS}/activity/?limit=20`
       try {
         var res = await fetch(url, settings);
         if (res.status != 200) {
