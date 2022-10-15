@@ -63,6 +63,7 @@ const main = async () => {
         next = null; // a temproray fix
 
         data.results.forEach(async function (event) {
+          
             if (salesCache.includes(event.txn_id)) {
               newEvents = false;
               return;
@@ -80,6 +81,8 @@ const main = async () => {
             // new sale
 
             if (event.event_type == 'Sale' && event.order_status == 'fulfilled' && event.currency == 'ETH') {
+
+              console.log(event)
 
               console.log(event)
               let url = event.token.image_url;

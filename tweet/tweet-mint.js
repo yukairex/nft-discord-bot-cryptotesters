@@ -51,7 +51,7 @@ const main = async () => {
 
         data.results.forEach(async function (event) {
 
-          console.log(event)
+
 
             if (salesCache.includes(event.txn_id)) {
               newEvents = false;
@@ -68,10 +68,10 @@ const main = async () => {
             }
 
             // new sale
-            console.log(event)
 
 
             if (event.event_type == 'Mint') {
+              console.log(event)
               let url = event.token.image_url;
               let id = event.token.token_id;
               let end_price = 0.3;

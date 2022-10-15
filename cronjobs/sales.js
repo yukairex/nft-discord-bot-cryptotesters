@@ -53,7 +53,7 @@ module.exports = {
 
         data.results.forEach(async function (event) {
 
-            console.log(event)
+         
 
             if (salesCache.includes(event.txn_id)) {
               newEvents = false;
@@ -71,9 +71,8 @@ module.exports = {
 
             // new sale
 
-
-
             if (event.event_type == 'Sale' && event.order_status == 'fulfilled' && event.currency == 'ETH') {
+              console.log(event)
               const embedMsg = new Discord.MessageEmbed()
               .setColor('#0099ff')
               .setTitle(event.token.name)

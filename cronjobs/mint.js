@@ -51,7 +51,7 @@ module.exports = {
 
         data.results.forEach(async function (event) { 
 
-          console.log(event)
+     
 
             if (salesCache.includes(event.txn_id)) {
               newEvents = false;
@@ -68,9 +68,9 @@ module.exports = {
             }
 
             // new mint
-            console.log(event)
 
             if (event.event_type == 'Mint') {
+              console.log(event)
               const embedMsg = new Discord.MessageEmbed()
               .setColor('#0099ff')
               .setTitle(event.token.name)
