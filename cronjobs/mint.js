@@ -2,7 +2,7 @@ const fetch = require('node-fetch');
 const Discord = require('discord.js');
 const { quixoticAPI, network } = require('../config.json');
 const { checkPrice } = require("../price");
-
+const {postMessage} = require("../tele_message");
 var salesCache = [];
 var lastTimestamp = null;
 
@@ -94,6 +94,7 @@ module.exports = {
       }
       catch (error) {
         console.error(error);
+        await postMessage("cryptotester bot error:", error);
         return;
       }
     } while (next != null && newEvents)

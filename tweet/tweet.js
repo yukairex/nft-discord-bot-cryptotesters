@@ -8,12 +8,14 @@ var lastTimestamp = null;
 
 const eventQueue = [];
 
+const localMode = false;
+
 
 const main = async () => {
 
 
     if (lastTimestamp == null) {
-      lastTimestamp = Math.floor(Date.now() / 1000) - 120;
+      lastTimestamp = localMode? (Math.floor(Date.now() / 1000) - 60*60*24*5) : (Math.floor(Date.now() / 1000) - 120);
      // lastTimestamp = 1664602413; // initial deployment
     } else {
       lastTimestamp -= 30;
@@ -31,18 +33,26 @@ const main = async () => {
     };
 
     // query price from coingecko
-
-   let price =  await checkPrice(['ethereum']);
-
+  
+   let price;
+   if (localMode) {
+    price = {
+      ethereum: {
+        usd:1300
+      }
+    }
+   }else {
+    price =  await checkPrice(['ethereum']);
+   }
 
     do {
       // console.log(`querying twitter event....`)
 
       // URL https://api.quixotic.io/api/v1/opt/collection/
     //  let url = `${quixoticAPI}collection/${process.env.CONTRACT_ADDRESS}/activity/?event=SA&limit=10&currency=ETH`
-      let url = `${quixoticAPI}collection/${process.env.CONTRACT_ADDRESS}/activity/?limit=10`
+      let url = `${quixoticAPI}collection/${process.env.CONTRACT_ADDRESS}/activity/?limit=20`
 
-      console.log(url)
+      //console.log(url)
       try {
         var res = await fetch(url, settings);
         if (res.status != 200) {
@@ -68,7 +78,6 @@ const main = async () => {
             }
 
             // new sale
-            console.log(event)
 
             if (event.event_type == 'Sale' && event.order_status == 'fulfilled' && event.currency == 'ETH') {
 
@@ -84,12 +93,15 @@ const main = async () => {
               let quixoticURL = `https://quixotic.io/asset/${process.env.CONTRACT_ADDRESS}/${event.token.token_id}`
 
               let message = `Tester ${id} bought for ${end_price}\u039E ($${end_price_usd}) by ${to} from ${from}. ${quixoticURL} #cryptotesters #optimism`
-
-              eventQueue.push({
-                url,
-                message,
-                id
-              })
+              console.log(message)
+              if (!localMode) {
+                eventQueue.push({
+                  url,
+                  message,
+                  id
+                }) 
+              }
+     
             }
 
 
