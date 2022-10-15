@@ -50,7 +50,10 @@ module.exports = {
 
         next = null; // a temproray fix
 
-        data.results.forEach(function (event) {
+        data.results.forEach(async function (event) {
+
+            console.log(event)
+
             if (salesCache.includes(event.txn_id)) {
               newEvents = false;
               return;
@@ -66,7 +69,6 @@ module.exports = {
             }
 
             // new sale
-            console.log(event)
 
 
 

@@ -41,6 +41,7 @@ const main = async () => {
       // URL https://api.quixotic.io/api/v1/opt/collection/
     //  let url = `${quixoticAPI}collection/${process.env.CONTRACT_ADDRESS}/activity/?event=SA&limit=10&currency=ETH`
       let url = `${quixoticAPI}collection/${process.env.CONTRACT_ADDRESS}/activity/?limit=10`
+
       console.log(url)
       try {
         var res = await fetch(url, settings);
@@ -67,7 +68,7 @@ const main = async () => {
             }
 
             // new sale
-
+            console.log(event)
 
             if (event.event_type == 'Sale' && event.order_status == 'fulfilled' && event.currency == 'ETH') {
 

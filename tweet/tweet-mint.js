@@ -33,7 +33,7 @@ const main = async () => {
     let price =  await checkPrice(['ethereum']);
 
     do {
-      // console.log(`querying twitter event....`)
+       console.log(`querying twitter event....`)
 
       // URL https://api.quixotic.io/api/v1/opt/collection/
       let url = `${quixoticAPI}collection/${process.env.CONTRACT_ADDRESS}/activity/?limit=10`
@@ -50,6 +50,9 @@ const main = async () => {
         next = null; // a temproray fix
 
         data.results.forEach(async function (event) {
+
+          console.log(event)
+
             if (salesCache.includes(event.txn_id)) {
               newEvents = false;
               return;
