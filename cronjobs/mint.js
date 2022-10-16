@@ -94,7 +94,7 @@ module.exports = {
       }
       catch (error) {
         console.error(error);
-        await postMessage("cryptotester bot error:", error);
+        //await postMessage(`cryptotester bot error from mint`);
         return;
       }
     } while (next != null && newEvents)
