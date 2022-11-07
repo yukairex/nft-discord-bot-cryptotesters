@@ -9,7 +9,7 @@ var lastTimestamp = null;
 module.exports = {
   name: 'mint',
   description: 'mint bot',
-  interval: 60000,
+  interval: 30000,
   enabled: process.env.DISCORD_SALES_CHANNEL_ID != null,
   async execute(client) {
     if (lastTimestamp == null) {
