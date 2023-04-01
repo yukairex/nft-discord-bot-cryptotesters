@@ -1,107 +1,97 @@
-const fetch = require('node-fetch');
-const Discord = require('discord.js');
-const { quixoticAPI, network } = require('../config.json');
-const { checkPrice } = require("../price");
-const {postMessage} = require("../tele_message");
+const { getSales } = require("../lib/reservoir");
+require('dotenv').config();
+const addresses = [process.env.CONTRACT_ADDRESS]
 
-var salesCache = [];
 var lastTimestamp = null;
+var salesCache = [];
 
 module.exports = {
-  name: 'sales',
-  description: 'sales bot',
-  interval: 30000,
-  enabled: process.env.DISCORD_SALES_CHANNEL_ID != null,
-  async execute(client) {
-    if (lastTimestamp == null) {
-      lastTimestamp = Math.floor(Date.now() / 1000) - 120;
-      //lastTimestamp = 1653746603; // initial deployment
-    } else {
-      lastTimestamp -= 30;
-    }
-    let newTimestamp = Math.floor(Date.now() / 1000) - 30;
+    name: 'sales',
+    description: 'sales bot',
+    interval: 30000,
+    enabled: process.env.DISCORD_SALES_CHANNEL_ID != null,
+    async execute(client) {
 
-    let next = null;
-    let newEvents = true;
-    let settings = {
-      method: "GET",
-      headers: process.env.QUIXOTIC_API_KEY == null ? {} : {
-        "X-API-KEY": process.env.QUIXOTIC_API_KEY
-      }
-    };
-
-    // query price from coingecko
-    let price =  await checkPrice(['ethereum']);
+        if (lastTimestamp == null) {
+            lastTimestamp = Math.floor(Date.now() / 1000) - 120;
+            //lastTimestamp = 1653746603; // initial deployment
+          } else {
+            lastTimestamp -= 30;
+          }
+          let newTimestamp = Math.floor(Date.now() / 1000) - 30;
+      
+          let next = null;
+          let newEvents = true;
 
 
-    do {
-      //console.log(`querying sales event....`)
+        let price =  await checkPrice(['ethereum']);
+        
+        console.log(`checking new sales end at ${lastTimestamp}`)
+        let sales = await getSales(addresses, lastTimestamp);
+        for (let sale of sales){
+            let parsedData = parseSale(sale);
+            let { saleId, tokenId,filledPrice, currency, from, to, txHash } = parsedData
 
-      // URL https://api.quixotic.io/api/v1/opt/collection/
-     // let url = `${quixoticAPI}collection/${process.env.CONTRACT_ADDRESS}/activity/?event=SA&limit=10&currency=ETH`
-      let url = `${quixoticAPI}collection/${process.env.CONTRACT_ADDRESS}/activity/?limit=20`
-      try {
-        var res = await fetch(url, settings);
-        if (res.status != 200) {
-          throw new Error(`Couldn't retrieve events: ${res.statusText}`);
+            if (salesCache.includes(saleId)) {
+                newEvents = false;
+                break;
+            } else {
+                salesCache.push(saleId);
+                if (salesCache.length > 200) salesCache.shift();
+            }
+
+            const embedMsg = new Discord.MessageEmbed()
+            .setColor('#0099ff')
+            .setTitle(tokenId)
+            .setURL(`https://quixotic.io/asset/${process.env.CONTRACT_ADDRESS}/${tokenId}`)
+            .setDescription(`has just been sold for ${filledPrice}${currency}`)
+            .setImage(generateURL(tokenId))
+            .addField(`${currency}`,`${filledPrice}`, true)
+            .addField("USD",`$${(filledPrice*price.ethereum.usd).toFixed(0)}`, true)
+            //.addField("Link",`[Link](https://quixotic.io/asset/${process.env.CONTRACT_ADDRESS}/${event.token.token_id})`, true)
+            .addField("From", `[${from.slice(0, 8)}](https://optimistic.etherscan.io/address/${from})`, true)
+            .addField("To", `[${to.slice(0, 8)}](https://optimistic.etherscan.io/address/${to})`, true)
+           .addField("Transaction",`[Tx](https://optimistic.etherscan.io/tx/${txHash})`, true)
+
+            client.channels.fetch(process.env.DISCORD_SALES_CHANNEL_ID)
+              .then(channel => {
+                channel.send(embedMsg);
+              })
+              .catch(console.error);
+          }
         }
 
-        let data = await res.json();
-   
+}
 
-        next = null; // a temproray fix
 
-        data.results.forEach(async function (event) {
 
-         
 
-            if (salesCache.includes(event.txn_id)) {
-              newEvents = false;
-              return;
-            } else {
-              salesCache.push(event.txn_id);
-              if (salesCache.length > 200) salesCache.shift();
-            }
 
-            // list to new events only
-            if ((Date.parse(event.timestamp) / 1000) < lastTimestamp) {
-              newEvents = false;
-              return;
-            }
 
-            // new sale
+const parseSale = (sale) => {
+    console.log(sale)
+    let {orderSource, from, to, orderSide, amount, fillSource, price, txHash, token, saleId} = sale;
+    let  filledPrice = price.amount.decimal;
+    let currency = price.currency.symbol;
+   // let collection = token.contract;
+  
+    return {
+        tokenId:token.tokenId,
+        filledPrice,
+        currency,
+        orderSource,
+        fillSource,
+        from,
+        to,
+        orderSide,
+        amount,
+        txHash,
+        saleId
+    }
+}
 
-            if (event.event_type == 'Sale' && event.order_status == 'fulfilled' && event.currency == 'ETH') {
-              console.log(event)
-              const embedMsg = new Discord.MessageEmbed()
-              .setColor('#0099ff')
-              .setTitle(event.token.name)
-              .setURL(`https://quixotic.io/asset/${process.env.CONTRACT_ADDRESS}/${event.token.token_id}`)
-              .setDescription(`has just been sold for ${event.end_price / (1e9)}\u039E`)
-              .setImage(event.token.image_url)
-              .addField("Ethereum",`${event.end_price / (1e9)}\u039E`, true)
-              .addField("USD",`$${(event.end_price/1e9*price.ethereum.usd).toFixed(0)}`, true)
-              .addField("Link",`[Link](https://quixotic.io/asset/${process.env.CONTRACT_ADDRESS}/${event.token.token_id})`, true)
-              .addField("From", `[${event.from_profile.user?.username || event.from_profile.address.slice(0, 8)}](https://optimistic.etherscan.io/address/${event.from_profile.address})`, true)
-              .addField("To", `[${event.to_profile.user?.username || event.to_profile.address.slice(0, 8)}](https://optimistic.etherscan.io/address/${event.to_profile.address})`, true)
-              .addField("Transaction",`[Tx](https://optimistic.etherscan.io/tx/${event.txn_id})`, true)
-              .setFooter(`Powered by Quixotic API`)
-              client.channels.fetch(process.env.DISCORD_SALES_CHANNEL_ID)
-                .then(channel => {
-                  channel.send(embedMsg);
-                })
-                .catch(console.error);
-            }
-        });
-      }
-      catch (error) {
-        console.error(error);
-       //await postMessage(`cryptotester bot error from sale`);
-        return;
-      }
-    } while (next != null && newEvents)
 
-    lastTimestamp = newTimestamp;
-  }
-};
+const generateURL = (id) => {
+  return `https://cryptotesters.mypinata.cloud/ipfs/QmdwSvMaprFBQ7EjdiJ67GYVFgr6q18W4u2pK6f65BqnCh/${id}.png`
+}
 
