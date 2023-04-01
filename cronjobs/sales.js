@@ -1,3 +1,4 @@
+const Discord = require('discord.js');
 const { getSales } = require("../lib/reservoir");
 require('dotenv').config();
 const addresses = [process.env.CONTRACT_ADDRESS]
@@ -31,6 +32,7 @@ module.exports = {
         let sales = await getSales(addresses, lastTimestamp);
         for (let sale of sales){
             let parsedData = parseSale(sale);
+            console.log(parsedData)
             let { saleId, tokenId,filledPrice, currency, from, to, txHash } = parsedData
 
             if (salesCache.includes(saleId)) {
@@ -70,7 +72,7 @@ module.exports = {
 
 
 const parseSale = (sale) => {
-    console.log(sale)
+    //console.log(sale)
     let {orderSource, from, to, orderSide, amount, fillSource, price, txHash, token, saleId} = sale;
     let  filledPrice = price.amount.decimal;
     let currency = price.currency.symbol;
