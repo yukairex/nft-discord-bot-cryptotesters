@@ -1,6 +1,7 @@
 const { getSales } = require("../lib/reservoir");
 require('dotenv').config();
 const addresses = [process.env.CONTRACT_ADDRESS]
+const { checkPrice } = require("../../price");
 
 var lastTimestamp = null;
 var salesCache = [];
