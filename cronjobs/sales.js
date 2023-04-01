@@ -31,6 +31,7 @@ module.exports = {
         
         console.log(`checking new sales end at ${lastTimestamp}`)
         let sales = await getSales(addresses, lastTimestamp);
+        console.log(`found ${sales.length} sales`);
         for (let sale of sales){
             let parsedData = parseSale(sale);
           
