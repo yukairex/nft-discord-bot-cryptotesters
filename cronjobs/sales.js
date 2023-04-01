@@ -3,6 +3,7 @@ const { getSales } = require("../lib/reservoir");
 require('dotenv').config();
 const addresses = [process.env.CONTRACT_ADDRESS]
 const { checkPrice } = require("../price");
+const {sleep} = require("../tweet");
 
 var lastTimestamp = null;
 var salesCache = [];
@@ -32,7 +33,7 @@ module.exports = {
         let sales = await getSales(addresses, lastTimestamp);
         for (let sale of sales){
             let parsedData = parseSale(sale);
-            console.log(parsedData)
+          
             let { saleId, tokenId,filledPrice, currency, from, to, txHash } = parsedData
 
             if (salesCache.includes(saleId)) {
@@ -43,15 +44,17 @@ module.exports = {
                 if (salesCache.length > 200) salesCache.shift();
             }
 
+            console.log(parsedData)
+
             const embedMsg = new Discord.MessageEmbed()
             .setColor('#0099ff')
-            .setTitle(tokenId)
-            .setURL(`https://quixotic.io/asset/${process.env.CONTRACT_ADDRESS}/${tokenId}`)
+            .setTitle(`Tester${tokenId}`)
+            .setURL(`${generateOpenseaURL(tokenId)}`)
             .setDescription(`has just been sold for ${filledPrice}${currency}`)
             .setImage(generateURL(tokenId))
             .addField(`${currency}`,`${filledPrice}`, true)
             .addField("USD",`$${(filledPrice*price.ethereum.usd).toFixed(0)}`, true)
-            //.addField("Link",`[Link](https://quixotic.io/asset/${process.env.CONTRACT_ADDRESS}/${event.token.token_id})`, true)
+            .addField("Link",`[Link]${generateOpenseaURL(id)}`, true)
             .addField("From", `[${from.slice(0, 8)}](https://optimistic.etherscan.io/address/${from})`, true)
             .addField("To", `[${to.slice(0, 8)}](https://optimistic.etherscan.io/address/${to})`, true)
            .addField("Transaction",`[Tx](https://optimistic.etherscan.io/tx/${txHash})`, true)
@@ -61,6 +64,8 @@ module.exports = {
                 channel.send(embedMsg);
               })
               .catch(console.error);
+            
+              await sleep(500);
           }
         }
 
@@ -96,5 +101,9 @@ const parseSale = (sale) => {
 
 const generateURL = (id) => {
   return `https://cryptotesters.mypinata.cloud/ipfs/QmdwSvMaprFBQ7EjdiJ67GYVFgr6q18W4u2pK6f65BqnCh/${id}.png`
+}
+
+const generateOpenseaURL = (id) => {
+  return `https://opensea.io/assets/optimism/${process.env.CONTRACT_ADDRESS}/${id}`
 }
 

@@ -1,8 +1,8 @@
 const fetch = require('node-fetch');
 const Discord = require('discord.js');
-const { quixoticAPI, network } = require('../config.json');
-const { checkPrice } = require("../price");
-const {postMessage} = require("../tele_message");
+const { quixoticAPI, network } = require('../../config.json');
+const { checkPrice } = require("../../price");
+const {postMessage} = require("../../tele_message");
 var salesCache = [];
 var lastTimestamp = null;
 
