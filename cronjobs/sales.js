@@ -54,7 +54,7 @@ module.exports = {
             .setImage(generateURL(tokenId))
             .addField(`${currency}`,`${filledPrice}`, true)
             .addField("USD",`$${(filledPrice*price.ethereum.usd).toFixed(0)}`, true)
-            .addField("Link",`[Link]${generateOpenseaURL(tokenId)}`, true)
+            .addField("Link",`[Link](${generateOpenseaURL(tokenId)})`, true)
             .addField("From", `[${from.slice(0, 8)}](https://optimistic.etherscan.io/address/${from})`, true)
             .addField("To", `[${to.slice(0, 8)}](https://optimistic.etherscan.io/address/${to})`, true)
            .addField("Transaction",`[Tx](https://optimistic.etherscan.io/tx/${txHash})`, true)
