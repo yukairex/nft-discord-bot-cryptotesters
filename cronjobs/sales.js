@@ -49,7 +49,7 @@ module.exports = {
             .setColor('#0099ff')
             .setTitle(`Tester${tokenId}`)
             .setURL(`${generateOpenseaURL(tokenId)}`)
-            .setDescription(`has just been sold for ${filledPrice}${currency}`)
+            .setDescription(`has just been sold for ${filledPrice} ${currency}`)
             .setImage(generateURL(tokenId))
             .addField(`${currency}`,`${filledPrice}`, true)
             .addField("USD",`$${(filledPrice*price.ethereum.usd).toFixed(0)}`, true)
