@@ -21,7 +21,7 @@ module.exports = {
     cache.get("FloorPrice", getFloors)
       .then((floorPrice) => {
         if (floorPrice != undefined)
-           message.channel.send(`The current floor price is ${floorPrice.price.amount.decimal} ${floorPrice.price.currency.symbol}`);
+           message.channel.send(`The current floor price is ${floorPrice.floor.price.amount.decimal} ${floorPrice.floor.price.currency.symbol}`);
         else 
            message.channel.send("Floor fetching error")
       })
