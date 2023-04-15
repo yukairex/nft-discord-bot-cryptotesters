@@ -17,11 +17,9 @@ module.exports = {
 
         if (lastTimestamp == null) {
             ///lastTimestamp = Math.floor(Date.now() / 1000) - 120;
-            lastTimestamp = 1681514458 - 100; // initial deployment
-          } else {
-            lastTimestamp -= 30;
-          }
-          let newTimestamp = Math.floor(Date.now() / 1000) - 30;
+            lastTimestamp = 1681393909 - 100; // initial deployment
+          } 
+          let newTimestamp = Math.floor(Date.now() / 1000) - 60 * 3;
       
           let next = null;
           let newEvents = true;
