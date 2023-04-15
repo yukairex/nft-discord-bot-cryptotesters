@@ -29,8 +29,8 @@ module.exports = {
 
         let price =  await checkPrice(['ethereum']);
         
-        console.log(`checking new sales end at ${lastTimestamp}`)
-        let sales = await getSales(addresses, lastTimestamp);
+        console.log(`checking new sales end from ${lastTimestamp} to ${newTimestamp}`)
+        let sales = await getSales(addresses, lastTimestamp, newTimestamp);
         console.log(`found ${sales.length} sales`);
         for (let sale of sales){
             let parsedData = parseSale(sale);
@@ -68,7 +68,13 @@ module.exports = {
             
               await sleep(500);
           }
+
+
+
+        lastTimestamp  = newTimestamp;
+
         }
+
 
 }
 
