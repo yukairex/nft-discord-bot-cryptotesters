@@ -16,8 +16,8 @@ module.exports = {
     async execute(client) {
 
         if (lastTimestamp == null) {
-            ///lastTimestamp = Math.floor(Date.now() / 1000) - 120;
-            lastTimestamp = 1681393909 - 100; // initial deployment
+            lastTimestamp = Math.floor(Date.now() / 1000) - 120;
+           // lastTimestamp = 1681393909 - 100; // initial deployment
           } 
           let newTimestamp = Math.floor(Date.now() / 1000) - 60 * 3;
       
